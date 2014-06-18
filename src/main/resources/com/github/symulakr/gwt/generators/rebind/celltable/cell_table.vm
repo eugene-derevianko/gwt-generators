@@ -1,0 +1,65 @@
+#set($parameterisingTypeName = $tableContext.parameterisingType.qualifiedSourceName)
+package ${modelContext.modelType.package.name};
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.CellTable;
+
+/**
+* This is automatically generated class by:
+* {@link ${generatorType.name} }
+* This class is used for generating JS code of the Cell Table for
+* {@link ${modelContext.modelType.qualifiedSourceName} }
+*
+* Do NOT Modify this class. It is regenerated every build
+*
+*/
+public class ${implName} extends CellTable<${parameterisingTypeName}>
+{
+
+   public static CellTable.Resources res = GWT.create(${tableContext.resourceType.qualifiedSourceName}.class);
+
+   public ${implName}()
+   {
+      super(0, res);
+      addColumns();
+      setEmptyTableWidget(new Image(res.cellTableLoading()));
+   }
+#if($tableContext.hasHtmlHeader)
+   private void addColumn(Column<${parameterisingTypeName}, ?> col, com.google.gwt.user.client.ui.UIObject header)
+   {
+      addColumn(col, new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(header.getElement()
+         .getInnerHTML())));
+   }
+#end
+
+   private void addColumns()
+   {
+#foreach($columnContext in $tableContext.columns)
+
+      Column<${parameterisingTypeName}, ${columnContext.cellDataType.qualifiedSourceName}> ${columnContext.columnName} = new Column<${parameterisingTypeName}, ${columnContext.cellDataType.qualifiedSourceName}>(new ${columnContext.cellType.qualifiedSourceName}())
+      {
+         @Override
+         public ${columnContext.cellDataType.qualifiedSourceName} getValue(${parameterisingTypeName} object)
+         {
+            return object.${columnContext.getter.name}();
+         }
+      };
+#if ($columnContext.fieldUpdater)
+      ${columnContext.columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.qualifiedSourceName}());
+#end
+#if ($columnContext.styleContext)
+      ${columnContext.columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
+      ${columnContext.columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
+#end
+#if($columnContext.reachHeader)
+      addColumn(${columnContext.columnName}, new ${columnContext.reachHeader.qualifiedSourceName}());
+#else
+      addColumn(${columnContext.columnName}, "${columnContext.header}");
+#end
+#end
+
+   }
+
+}

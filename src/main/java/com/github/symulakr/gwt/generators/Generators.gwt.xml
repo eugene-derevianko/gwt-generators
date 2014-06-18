@@ -1,0 +1,10 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="report">
+    <inherits name="com.google.gwt.user.User"/>
+
+    <generate-with class="com.github.symulakr.gwt.generators.rebind.celltable.CellTableGenerator">
+        <when-type-assignable class="com.github.symulakr.gwt.generators.client.celltable.CellTableModel"/>
+    </generate-with>
+
+</module>
