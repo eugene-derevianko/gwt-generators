@@ -1,4 +1,4 @@
-generators
+gwt-generators
 ==========
 
 gwt-utils
