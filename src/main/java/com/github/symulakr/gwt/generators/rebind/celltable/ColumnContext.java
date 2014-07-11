@@ -23,6 +23,7 @@ public class ColumnContext extends AbstractContext
    private JMethod getter;
    private JClassType fieldUpdater;
    private ColumnStyleContext styleContext;
+   private int index;
 
    public ColumnContext(TypeOracle typeOracle, JMethod method) throws NotFoundException
    {
@@ -32,6 +33,7 @@ public class ColumnContext extends AbstractContext
       cellType = findType(column.cellType());
       getter = method;
       cellDataType = getter.getReturnType();
+      index = column.index();
       extractHeader(column, method);
       if (column.fieldUpdater() != EmptyFieldUpdater.class)
       {
@@ -58,6 +60,11 @@ public class ColumnContext extends AbstractContext
       {
          header = column.header();
       }
+   }
+
+   public int getIndex()
+   {
+      return index;
    }
 
    public String getColumnName()

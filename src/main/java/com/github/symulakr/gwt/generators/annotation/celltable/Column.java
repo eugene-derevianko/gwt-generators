@@ -15,8 +15,14 @@ import java.lang.annotation.Target;
 public @interface Column
 {
 
+   public static final int UNSPECIFIED = -1;
+
    String header() default "";
+
    Class<? extends FieldUpdater> fieldUpdater() default EmptyFieldUpdater.class;
+
    Class<? extends AbstractCell> cellType() default TextCell.class;
+
+   int index() default UNSPECIFIED;
 
 }

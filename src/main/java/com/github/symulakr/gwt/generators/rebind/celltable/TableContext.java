@@ -1,7 +1,5 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import java.util.List;
-
 import com.github.symulakr.gwt.generators.annotation.celltable.Table;
 import com.github.symulakr.gwt.generators.annotation.celltable.TableResources;
 import com.google.gwt.core.ext.typeinfo.JClassType;
@@ -13,7 +11,7 @@ public class TableContext extends AbstractContext
 {
 
    private JClassType resourceType = findType(Resources.class);
-   private List<ColumnContext> columns;
+   private ColumnContext[] columns;
    private JClassType parameterisingType;
    private boolean hasHtmlHeader = false;
 
@@ -64,7 +62,7 @@ public class TableContext extends AbstractContext
       return resourceType;
    }
 
-   public List<ColumnContext> getColumns()
+   public ColumnContext[] getColumns()
    {
       return columns;
    }

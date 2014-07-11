@@ -1,7 +1,9 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +16,7 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class ColumnExtractor
 {
 
-   public static List<ColumnContext> extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
+   public static ColumnContext[] extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
       Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>();
       extractMethods(methods, modelType);
@@ -23,7 +25,34 @@ public class ColumnExtractor
       {
          columns.add(new ColumnContext(typeOracle, method));
       }
-      return columns;
+      return sortColumns(columns);
+   }
+
+   private static ColumnContext[] sortColumns(List<ColumnContext> columns)
+   {
+      ColumnContext[] sortedColumns = new ColumnContext[columns.size()];
+      Deque<ColumnContext> queue = new LinkedList<ColumnContext>();
+      for (ColumnContext columnContext : columns)
+      {
+         int index = columnContext.getIndex();
+         if (index > Column.UNSPECIFIED && index < sortedColumns.length && sortedColumns[index] == null)
+         {
+            sortedColumns[index] = columnContext;
+         }
+         else
+         {
+            queue.offer(columnContext);
+         }
+      }
+
+      for (int i = 0; i < columns.size(); i++)
+      {
+         if (sortedColumns[i] == null)
+         {
+            sortedColumns[i] = queue.pollFirst();
+         }
+      }
+      return sortedColumns;
    }
 
    private static void extractMethods(Map<String, JMethod> methods, JClassType type)
