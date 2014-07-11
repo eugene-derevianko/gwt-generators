@@ -1,17 +1,13 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.Column;
-import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
+import java.util.List;
+
 import com.github.symulakr.gwt.generators.annotation.celltable.Table;
 import com.github.symulakr.gwt.generators.annotation.celltable.TableResources;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TableContext extends AbstractContext
 {
@@ -53,16 +49,12 @@ public class TableContext extends AbstractContext
 
    private void extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
-      columns = new ArrayList<ColumnContext>();
-      for (JMethod method : modelType.getMethods())
+      columns = ColumnExtractor.extractColumns(typeOracle, modelType);
+      for (ColumnContext columnContext : columns)
       {
-         if (method.isAnnotationPresent(HtmlHeader.class))
+         if (columnContext.getReachHeader() != null)
          {
             hasHtmlHeader = true;
-         }
-         if (method.isAnnotationPresent(Column.class))
-         {
-            columns.add(new ColumnContext(typeOracle, modelType, method));
          }
       }
    }

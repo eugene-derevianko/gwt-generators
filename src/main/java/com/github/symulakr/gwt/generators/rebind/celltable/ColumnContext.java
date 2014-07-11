@@ -24,7 +24,7 @@ public class ColumnContext extends AbstractContext
    private JClassType fieldUpdater;
    private ColumnStyleContext styleContext;
 
-   public ColumnContext(TypeOracle typeOracle, JClassType modelType, JMethod method) throws NotFoundException
+   public ColumnContext(TypeOracle typeOracle, JMethod method) throws NotFoundException
    {
       super(typeOracle);
       Column column = method.getAnnotation(Column.class);
