@@ -14,6 +14,6 @@ public abstract class AbstractContext
 
    protected JClassType findType(Class<?> clazz)
    {
-      return typeOracle.findType(clazz.getName());
+      return typeOracle.findType(clazz.getName().replaceAll("\\$", "."));
    }
 }

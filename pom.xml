@@ -67,7 +67,6 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.vm</include>
-                    <include>**/*.css</include>
                     <include>**/*.properties</include>
                 </includes>
             </resource>

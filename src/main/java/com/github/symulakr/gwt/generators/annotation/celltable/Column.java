@@ -11,12 +11,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 public @interface Column
 {
 
    String header() default "";
-   String getter() default "";
    Class<? extends FieldUpdater> fieldUpdater() default EmptyFieldUpdater.class;
    Class<? extends AbstractCell> cellType() default TextCell.class;
 

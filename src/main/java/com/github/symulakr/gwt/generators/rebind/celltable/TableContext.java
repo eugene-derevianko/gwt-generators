@@ -4,11 +4,11 @@ import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.annotation.celltable.Table;
 import com.github.symulakr.gwt.generators.annotation.celltable.TableResources;
-import com.github.symulakr.gwt.generators.client.celltable.CellTableRes;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JField;
+import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.user.cellview.client.CellTable.Resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class TableContext extends AbstractContext
 {
 
-   private JClassType resourceType;
+   private JClassType resourceType = findType(Resources.class);
    private List<ColumnContext> columns;
    private JClassType parameterisingType;
    private boolean hasHtmlHeader = false;
@@ -42,31 +42,27 @@ public class TableContext extends AbstractContext
       }
    }
 
-   private void extractResourceType(JClassType modelType) throws NotFoundException
+   private void extractResourceType(JClassType modelType)
    {
       if (modelType.isAnnotationPresent(TableResources.class))
       {
          TableResources tableResources = modelType.getAnnotation(TableResources.class);
          resourceType = findType(tableResources.value());
       }
-      else
-      {
-         resourceType = findType(CellTableRes.class);
-      }
    }
 
    private void extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
       columns = new ArrayList<ColumnContext>();
-      for (JField field : modelType.getFields())
+      for (JMethod method : modelType.getMethods())
       {
-         if (field.isAnnotationPresent(HtmlHeader.class))
+         if (method.isAnnotationPresent(HtmlHeader.class))
          {
             hasHtmlHeader = true;
          }
-         if (field.isAnnotationPresent(Column.class))
+         if (method.isAnnotationPresent(Column.class))
          {
-            columns.add(new ColumnContext(typeOracle, modelType, field));
+            columns.add(new ColumnContext(typeOracle, modelType, method));
          }
       }
    }

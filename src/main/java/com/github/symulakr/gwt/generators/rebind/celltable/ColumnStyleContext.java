@@ -1,7 +1,7 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
-import com.google.gwt.core.ext.typeinfo.JField;
+import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -14,10 +14,10 @@ public class ColumnStyleContext extends AbstractContext
    private String horizontalAlignment;
    private String verticalAlignment;
 
-   public ColumnStyleContext(TypeOracle typeOracle, JField field)
+   public ColumnStyleContext(TypeOracle typeOracle, JMethod method)
    {
       super(typeOracle);
-      ColumnStyle columnStyle = field.getAnnotation(ColumnStyle.class);
+      ColumnStyle columnStyle = method.getAnnotation(ColumnStyle.class);
       setHorizontalAlignment(columnStyle.horizontalAlignment());
       setVerticalAlignment(columnStyle.verticalAlignment());
    }

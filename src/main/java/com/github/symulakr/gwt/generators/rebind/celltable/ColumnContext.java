@@ -6,7 +6,6 @@ import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.EmptyFieldUpdater;
 import com.github.symulakr.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -25,63 +24,39 @@ public class ColumnContext extends AbstractContext
    private JClassType fieldUpdater;
    private ColumnStyleContext styleContext;
 
-   public ColumnContext(TypeOracle typeOracle, JClassType modelType, JField field) throws NotFoundException
+   public ColumnContext(TypeOracle typeOracle, JClassType modelType, JMethod method) throws NotFoundException
    {
       super(typeOracle);
-      Column column = field.getAnnotation(Column.class);
-      columnName = field.getName() + "Column";
+      Column column = method.getAnnotation(Column.class);
+      columnName = method.getName() + "Column";
       cellType = findType(column.cellType());
-      setGetter(column, modelType, field);
+      getter = method;
       cellDataType = getter.getReturnType();
-      extractHeader(column, field);
+      extractHeader(column, method);
       if (column.fieldUpdater() != EmptyFieldUpdater.class)
       {
          fieldUpdater = findType(column.fieldUpdater());
       }
-      if (field.isAnnotationPresent(ColumnStyle.class))
+      if (method.isAnnotationPresent(ColumnStyle.class))
       {
-         styleContext = new ColumnStyleContext(typeOracle, field);
+         styleContext = new ColumnStyleContext(typeOracle, method);
       }
-      if (field.isAnnotationPresent(HtmlHeader.class))
+      if (method.isAnnotationPresent(HtmlHeader.class))
       {
-         HtmlHeader htmlHeader = field.getAnnotation(HtmlHeader.class);
+         HtmlHeader htmlHeader = method.getAnnotation(HtmlHeader.class);
          reachHeader = findType(htmlHeader.value());
       }
    }
 
-   private void extractHeader(Column column, JField field)
+   private void extractHeader(Column column, JMethod method)
    {
       if (StringUtils.isEmpty(column.header()))
       {
-         header = field.getName();
+         header = method.getName();
       }
       else
       {
          header = column.header();
-      }
-   }
-
-   private void setGetter(Column column, JClassType modelType, JField field) throws NotFoundException
-   {
-      if (StringUtils.isNotEmpty(column.getter()))
-      {
-         getter = modelType.getMethod(column.getter(), new JType[]
-         {});
-      }
-      else
-      {
-         String fieldName = field.getName();
-         for (JMethod method : modelType.getMethods())
-         {
-            if (method.getName()
-                  .toLowerCase()
-                  .contains("get" + fieldName.toLowerCase()))
-            {
-               getter = method;
-               return;
-            }
-         }
-         throw new NotFoundException();
       }
    }
 
