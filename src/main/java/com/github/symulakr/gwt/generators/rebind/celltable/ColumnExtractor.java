@@ -2,6 +2,7 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,29 +18,35 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class ColumnExtractor
 {
 
-   private static void extractMethods(Map<String, JMethod> columns, JMethod[] methods)
+   private void extractMethods(Map<String, JMethod> columns, JMethod[] methods)
    {
       for (JMethod method : methods)
       {
          if (method.isAnnotationPresent(Column.class))
          {
             columns.put(method.getName(), method);
+            System.out.println("put "+method.getName());
          }
          else
          {
             columns.remove(method.getName());
+            System.out.println("remove " + method.getName());
          }
       }
    }
 
    public ColumnContext[] extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
-      Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>();
+      Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>(16, 0.75f, true);
       extractMethods(methods, modelType);
       List<ColumnContext> columns = new ArrayList<ColumnContext>();
-      for (JMethod method : methods.values())
+      Iterator<JMethod> methodIterator = methods.values().iterator();
+      while (methodIterator.hasNext())
       {
-         columns.add(new ColumnContext(typeOracle, method));
+         JMethod me = methodIterator.next();
+         System.out.println("proc "+me.getName());
+
+         columns.add(new ColumnContext(typeOracle, me));
       }
       return sortColumns(columns);
    }
@@ -76,6 +83,8 @@ public class ColumnExtractor
       if (type != null)
       {
          extractMethods(methods, type.getSuperclass());
+         System.out.println("proc "+type.getName());
+
          extractMethods(methods, type.getMethods());
       }
    }

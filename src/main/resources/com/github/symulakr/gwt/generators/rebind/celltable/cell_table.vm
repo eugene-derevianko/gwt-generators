@@ -22,14 +22,22 @@ public class ${implName} extends CellTable<${modelType}>
    public static CellTable.Resources res = GWT.create(${tableContext.resourceType.qualifiedSourceName}.class);
 
 #foreach($columnContext in $tableContext.columns)
-    public static final Getter<${modelType}, String> ${columnContext.getGetterName()} = new Getter<${modelType}, String>()
-    {
-        @Override
-        public String getValue(${modelType} model)
-        {
-            return model.${columnContext.getter.name}();
-        }
-    };
+#set($returnType = $columnContext.returnType.qualifiedSourceName)
+#set($getterName = $columnContext.getGetterName())
+
+   public static final Getter<${modelType}, ${returnType}> ${getterName} = new Getter<${modelType}, ${returnType}>()
+   {
+      @Override
+      public ${returnType} getValue(${modelType} model)
+      {
+#if($columnContext.isDefaultCell())
+         return java.util.Objects.toString(model.${getterName}(), "");
+#else
+         return model.${getterName}();
+#end
+      }
+   };
+
 #end
 
    public ${implName}()
@@ -49,26 +57,29 @@ public class ${implName} extends CellTable<${modelType}>
    private void addColumns()
    {
 #foreach($columnContext in $tableContext.columns)
+#set($returnType = $columnContext.returnType.qualifiedSourceName)
+#set($getterName = $columnContext.getGetterName())
+#set($columnName = $columnContext.columnName)
 
-      Column<${modelType}, ${columnContext.cellDataType.qualifiedSourceName}> ${columnContext.columnName} = new Column<${modelType}, ${columnContext.cellDataType.qualifiedSourceName}>(new ${columnContext.cellType.qualifiedSourceName}())
+      Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.qualifiedSourceName}())
       {
          @Override
-         public ${columnContext.cellDataType.qualifiedSourceName} getValue(${modelType} object)
+         public ${returnType} getValue(${modelType} object)
          {
-            return ${columnContext.getGetterName()}.getValue(object);
+            return ${getterName}.getValue(object);
          }
       };
 #if ($columnContext.fieldUpdater)
-      ${columnContext.columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.qualifiedSourceName}());
+      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.qualifiedSourceName}());
 #end
 #if ($columnContext.styleContext)
-      ${columnContext.columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
-      ${columnContext.columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
+      ${columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
+      ${columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
 #end
 #if($columnContext.reachHeader)
-      addColumn(${columnContext.columnName}, new ${columnContext.reachHeader.qualifiedSourceName}());
+      addColumn(${columnName}, new ${columnContext.reachHeader.qualifiedSourceName}());
 #else
-      addColumn(${columnContext.columnName}, "${columnContext.header}");
+      addColumn(${columnName}, "${columnContext.header}");
 #end
 #end
 

@@ -4,7 +4,6 @@ import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
-import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
@@ -18,55 +17,47 @@ public class ColumnContext extends AbstractContext
    private String header;
    private JClassType reachHeader;
    private String columnName;
-   private JType cellDataType;
-   private JClassType cellType;
-   private JMethod getter;
+   private JMethod annotatedMethod;
    private JClassType fieldUpdater;
    private ColumnStyleContext styleContext;
    private int index;
-   private boolean isTextCell = false;
+   private CellContext cell;
 
-   public ColumnContext(TypeOracle typeOracle, JMethod method) throws NotFoundException
+   public ColumnContext(TypeOracle typeOracle, JMethod annotatedMethod) throws NotFoundException
    {
       super(typeOracle);
-      Column column = method.getAnnotation(Column.class);
-      columnName = method.getName() + "Column";
-      getter = method;
-      decideCellType(method.getReturnType(), column.cellType());
+      this.annotatedMethod = annotatedMethod;
+      Column column = annotatedMethod.getAnnotation(Column.class);
+      columnName = annotatedMethod.getName() + "Column";
+      cell = decideCell();
       index = column.index();
-      extractHeader(column, method);
+      extractHeader(column);
       if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
          fieldUpdater = findType(column.fieldUpdater());
       }
-      if (method.isAnnotationPresent(ColumnStyle.class))
+      if (annotatedMethod.isAnnotationPresent(ColumnStyle.class))
       {
-         styleContext = new ColumnStyleContext(typeOracle, method);
+         styleContext = new ColumnStyleContext(annotatedMethod);
       }
-      if (method.isAnnotationPresent(HtmlHeader.class))
+      if (annotatedMethod.isAnnotationPresent(HtmlHeader.class))
       {
-         HtmlHeader htmlHeader = method.getAnnotation(HtmlHeader.class);
+         HtmlHeader htmlHeader = annotatedMethod.getAnnotation(HtmlHeader.class);
          reachHeader = findType(htmlHeader.value());
       }
    }
 
-   private void decideCellType(JType returnType, Class cellType)
+   private CellContext decideCell()
    {
-      //todo throw exception for primitive types
-      if (DefaultValue.DEFAULT_CELL_TYPE.equals(cellType))
-      {
-         this.cellDataType = findType(String.class);
-         this.isTextCell = true;
-      }
-      this.cellType = findType(cellType);
-      this.cellDataType = returnType;
+      CellInfoExtractor cellInfoExtractor = new CellInfoExtractor(typeOracle);
+      return cellInfoExtractor.getCellInfo(annotatedMethod);
    }
 
-   private void extractHeader(Column column, JMethod method)
+   private void extractHeader(Column column)
    {
       if (StringUtils.isEmpty(column.header()))
       {
-         header = method.getName();
+         header = annotatedMethod.getName();
       }
       else
       {
@@ -74,17 +65,31 @@ public class ColumnContext extends AbstractContext
       }
    }
 
-   //Getters for Velocity
-   //----------------------------------------
+   //-----Getters for Velocity-----------
+
+   public String getColumnName()
+   {
+      return columnName;
+   }
 
    public String getGetterName()
    {
-      return getter.getName();
+      return annotatedMethod.getName();
    }
 
-   public boolean isTextCell()
+   public boolean isDefaultCell()
    {
-      return isTextCell;
+      return cell.isDefaultCell();
+   }
+
+   public JType getReturnType()
+   {
+      return cell.getReturnType();
+   }
+
+   public JClassType getCellType()
+   {
+      return cell.getCellType();
    }
 
    //----------------------------------------
@@ -93,26 +98,6 @@ public class ColumnContext extends AbstractContext
    public int getIndex()
    {
       return index;
-   }
-
-   public String getColumnName()
-   {
-      return columnName;
-   }
-
-   public JType getCellDataType()
-   {
-      return cellDataType;
-   }
-
-   public JClassType getCellType()
-   {
-      return cellType;
-   }
-
-   public JMethod getGetter()
-   {
-      return getter;
    }
 
    public String getHeader()

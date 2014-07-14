@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 
@@ -14,8 +13,8 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 public @interface ColumnStyle
 {
 
-   TextAlign horizontalAlignment() default DefaultValue.DEFAULT_HORIZONTAL_ALIGNMENT;
+   TextAlign horizontalAlignment() default TextAlign.CENTER;
 
-   VerticalAlign verticalAlignment() default DefaultValue.DEFAULT_VERTICAL_ALIGNMENT;
+   VerticalAlign verticalAlignment() default VerticalAlign.MIDDLE;
 
 }
