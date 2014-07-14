@@ -1,9 +1,11 @@
-#set($parameterisingTypeName = $tableContext.parameterisingType.qualifiedSourceName)
+#set($modelType = $tableContext.modelType.qualifiedSourceName)
 package ${modelContext.modelType.package.name};
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.github.symulakr.gwt.generators.client.celltable.Getter;
+
 
 /**
 * This is automatically generated class by:
@@ -14,18 +16,38 @@ import com.google.gwt.user.cellview.client.CellTable;
 * Do NOT Modify this class. It is regenerated every build
 *
 */
-public class ${implName} extends CellTable<${parameterisingTypeName}>
+public class ${implName} extends CellTable<${modelType}>
 {
 
    public static CellTable.Resources res = GWT.create(${tableContext.resourceType.qualifiedSourceName}.class);
+
+#foreach($columnContext in $tableContext.columns)
+#set($returnType = $columnContext.returnType.qualifiedSourceName)
+#set($getterName = $columnContext.getGetterName())
+
+   public static final Getter<${modelType}, ${returnType}> ${getterName} = new Getter<${modelType}, ${returnType}>()
+   {
+      @Override
+      public ${returnType} getValue(${modelType} model)
+      {
+#if($columnContext.isDefaultCell())
+         return java.util.Objects.toString(model.${getterName}(), "");
+#else
+         return model.${getterName}();
+#end
+      }
+   };
+
+#end
 
    public ${implName}()
    {
       super(0, res);
       addColumns();
    }
+
 #if($tableContext.hasHtmlHeader)
-   private void addColumn(Column<${parameterisingTypeName}, ?> col, com.google.gwt.user.client.ui.UIObject header)
+   private void addColumn(Column<${modelType}, ?> col, com.google.gwt.user.client.ui.UIObject header)
    {
       addColumn(col, new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(header.getElement()
          .getInnerHTML())));
@@ -35,26 +57,29 @@ public class ${implName} extends CellTable<${parameterisingTypeName}>
    private void addColumns()
    {
 #foreach($columnContext in $tableContext.columns)
+#set($returnType = $columnContext.returnType.qualifiedSourceName)
+#set($getterName = $columnContext.getGetterName())
+#set($columnName = $columnContext.columnName)
 
-      Column<${parameterisingTypeName}, ${columnContext.cellDataType.qualifiedSourceName}> ${columnContext.columnName} = new Column<${parameterisingTypeName}, ${columnContext.cellDataType.qualifiedSourceName}>(new ${columnContext.cellType.qualifiedSourceName}())
+      Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.qualifiedSourceName}())
       {
          @Override
-         public ${columnContext.cellDataType.qualifiedSourceName} getValue(${parameterisingTypeName} object)
+         public ${returnType} getValue(${modelType} object)
          {
-            return object.${columnContext.getter.name}();
+            return ${getterName}.getValue(object);
          }
       };
 #if ($columnContext.fieldUpdater)
-      ${columnContext.columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.qualifiedSourceName}());
+      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.getName()}());
 #end
 #if ($columnContext.styleContext)
-      ${columnContext.columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
-      ${columnContext.columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
+      ${columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
+      ${columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
 #end
 #if($columnContext.reachHeader)
-      addColumn(${columnContext.columnName}, new ${columnContext.reachHeader.qualifiedSourceName}());
+      addColumn(${columnName}, new ${columnContext.reachHeader.getName()}());
 #else
-      addColumn(${columnContext.columnName}, "${columnContext.header}");
+      addColumn(${columnName}, "${columnContext.header}");
 #end
 #end
 

@@ -1,53 +1,43 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.Table;
-import com.github.symulakr.gwt.generators.annotation.celltable.TableResources;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ColumnExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ModelTypeExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ResourceTypeExtractor;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.user.cellview.client.CellTable.Resources;
 
-public class TableContext extends AbstractContext
+public class TableContext
 {
 
-   private JClassType resourceType = findType(Resources.class);
+   private JClassType resourceType;
    private ColumnContext[] columns;
-   private JClassType parameterisingType;
+   private JClassType modelType;
    private boolean hasHtmlHeader = false;
 
    public TableContext(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
-      super(typeOracle);
-      extractParameterisingType(modelType);
-      extractResourceType(modelType);
+      extractModelType(typeOracle, modelType);
+      extractResourceType(typeOracle, modelType);
       extractColumns(typeOracle, modelType);
    }
 
-   private void extractParameterisingType(JClassType modelType)
+   private void extractModelType(TypeOracle typeOracle, JClassType modelType)
    {
-      if (modelType.isAnnotationPresent(Table.class))
-      {
-         Table table = modelType.getAnnotation(Table.class);
-         parameterisingType = findType(table.parameterisingType());
-      }
-      else
-      {
-         parameterisingType = modelType;
-      }
+      ModelTypeExtractor modelTypeExtractor = new ModelTypeExtractor(typeOracle);
+      this.modelType = modelTypeExtractor.extractModelType(modelType);
    }
 
-   private void extractResourceType(JClassType modelType)
+   private void extractResourceType(TypeOracle typeOracle, JClassType modelType)
    {
-      if (modelType.isAnnotationPresent(TableResources.class))
-      {
-         TableResources tableResources = modelType.getAnnotation(TableResources.class);
-         resourceType = findType(tableResources.value());
-      }
+      ResourceTypeExtractor resourceTypeExtractor = new ResourceTypeExtractor(typeOracle);
+      resourceType = resourceTypeExtractor.extractResourceType(modelType);
    }
 
    private void extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
-      columns = ColumnExtractor.extractColumns(typeOracle, modelType);
+      ColumnExtractor columnExtractor = new ColumnExtractor();
+      columns = columnExtractor.extractColumns(typeOracle, modelType);
       for (ColumnContext columnContext : columns)
       {
          if (columnContext.getReachHeader() != null)
@@ -67,9 +57,9 @@ public class TableContext extends AbstractContext
       return columns;
    }
 
-   public JClassType getParameterisingType()
+   public JClassType getModelType()
    {
-      return parameterisingType;
+      return modelType;
    }
 
    public boolean isHasHtmlHeader()

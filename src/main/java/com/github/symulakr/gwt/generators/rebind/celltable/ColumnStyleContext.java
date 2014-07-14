@@ -2,21 +2,19 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
-public class ColumnStyleContext extends AbstractContext
+public class ColumnStyleContext
 {
 
    private String horizontalAlignment;
    private String verticalAlignment;
 
-   public ColumnStyleContext(TypeOracle typeOracle, JMethod method)
+   public ColumnStyleContext(JMethod method)
    {
-      super(typeOracle);
       ColumnStyle columnStyle = method.getAnnotation(ColumnStyle.class);
       setHorizontalAlignment(columnStyle.horizontalAlignment());
       setVerticalAlignment(columnStyle.verticalAlignment());
