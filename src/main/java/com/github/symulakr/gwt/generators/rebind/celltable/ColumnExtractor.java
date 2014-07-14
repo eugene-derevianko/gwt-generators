@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.Column;
+import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -16,7 +17,22 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class ColumnExtractor
 {
 
-   public static ColumnContext[] extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
+   private static void extractMethods(Map<String, JMethod> columns, JMethod[] methods)
+   {
+      for (JMethod method : methods)
+      {
+         if (method.isAnnotationPresent(Column.class))
+         {
+            columns.put(method.getName(), method);
+         }
+         else
+         {
+            columns.remove(method.getName());
+         }
+      }
+   }
+
+   public ColumnContext[] extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
       Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>();
       extractMethods(methods, modelType);
@@ -28,14 +44,14 @@ public class ColumnExtractor
       return sortColumns(columns);
    }
 
-   private static ColumnContext[] sortColumns(List<ColumnContext> columns)
+   private ColumnContext[] sortColumns(List<ColumnContext> columns)
    {
       ColumnContext[] sortedColumns = new ColumnContext[columns.size()];
       Deque<ColumnContext> queue = new LinkedList<ColumnContext>();
       for (ColumnContext columnContext : columns)
       {
          int index = columnContext.getIndex();
-         if (index > Column.UNSPECIFIED && index < sortedColumns.length && sortedColumns[index] == null)
+         if (index > DefaultValue.UNSPECIFIED && index < sortedColumns.length && sortedColumns[index] == null)
          {
             sortedColumns[index] = columnContext;
          }
@@ -55,27 +71,12 @@ public class ColumnExtractor
       return sortedColumns;
    }
 
-   private static void extractMethods(Map<String, JMethod> methods, JClassType type)
+   private void extractMethods(Map<String, JMethod> methods, JClassType type)
    {
       if (type != null)
       {
          extractMethods(methods, type.getSuperclass());
          extractMethods(methods, type.getMethods());
-      }
-   }
-
-   private static void extractMethods(Map<String, JMethod> columns, JMethod[] methods)
-   {
-      for (JMethod method : methods)
-      {
-         if (method.isAnnotationPresent(Column.class))
-         {
-            columns.put(method.getName(), method);
-         }
-         else
-         {
-            columns.remove(method.getName());
-         }
       }
    }
 

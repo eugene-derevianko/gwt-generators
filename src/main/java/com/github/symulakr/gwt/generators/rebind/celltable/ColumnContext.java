@@ -3,14 +3,14 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
-import com.github.symulakr.gwt.generators.client.celltable.EmptyFieldUpdater;
+import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
+import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-
 
 public class ColumnContext extends AbstractContext
 {
@@ -24,18 +24,18 @@ public class ColumnContext extends AbstractContext
    private JClassType fieldUpdater;
    private ColumnStyleContext styleContext;
    private int index;
+   private boolean isTextCell = false;
 
    public ColumnContext(TypeOracle typeOracle, JMethod method) throws NotFoundException
    {
       super(typeOracle);
       Column column = method.getAnnotation(Column.class);
       columnName = method.getName() + "Column";
-      cellType = findType(column.cellType());
       getter = method;
-      cellDataType = getter.getReturnType();
+      decideCellType(method.getReturnType(), column.cellType());
       index = column.index();
       extractHeader(column, method);
-      if (column.fieldUpdater() != EmptyFieldUpdater.class)
+      if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
          fieldUpdater = findType(column.fieldUpdater());
       }
@@ -50,6 +50,18 @@ public class ColumnContext extends AbstractContext
       }
    }
 
+   private void decideCellType(JType returnType, Class cellType)
+   {
+      //todo throw exception for primitive types
+      if (DefaultValue.DEFAULT_CELL_TYPE.equals(cellType))
+      {
+         this.cellDataType = findType(String.class);
+         this.isTextCell = true;
+      }
+      this.cellType = findType(cellType);
+      this.cellDataType = returnType;
+   }
+
    private void extractHeader(Column column, JMethod method)
    {
       if (StringUtils.isEmpty(column.header()))
@@ -61,6 +73,22 @@ public class ColumnContext extends AbstractContext
          header = column.header();
       }
    }
+
+   //Getters for Velocity
+   //----------------------------------------
+
+   public String getGetterName()
+   {
+      return getter.getName();
+   }
+
+   public boolean isTextCell()
+   {
+      return isTextCell;
+   }
+
+   //----------------------------------------
+
 
    public int getIndex()
    {
