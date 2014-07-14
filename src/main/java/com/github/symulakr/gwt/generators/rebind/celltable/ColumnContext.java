@@ -4,6 +4,7 @@ import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
 import com.github.symulakr.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
@@ -11,30 +12,29 @@ import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
-public class ColumnContext extends AbstractContext
+public class ColumnContext
 {
 
    private String header;
-   private JClassType reachHeader;
+   private Class reachHeader;
    private String columnName;
    private JMethod annotatedMethod;
-   private JClassType fieldUpdater;
+   private Class fieldUpdater;
    private ColumnStyleContext styleContext;
    private int index;
    private CellContext cell;
 
    public ColumnContext(TypeOracle typeOracle, JMethod annotatedMethod) throws NotFoundException
    {
-      super(typeOracle);
       this.annotatedMethod = annotatedMethod;
       Column column = annotatedMethod.getAnnotation(Column.class);
       columnName = annotatedMethod.getName() + "Column";
-      cell = decideCell();
+      cell = decideCell(typeOracle);
       index = column.index();
       extractHeader(column);
       if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
-         fieldUpdater = findType(column.fieldUpdater());
+         fieldUpdater = column.fieldUpdater();
       }
       if (annotatedMethod.isAnnotationPresent(ColumnStyle.class))
       {
@@ -43,11 +43,11 @@ public class ColumnContext extends AbstractContext
       if (annotatedMethod.isAnnotationPresent(HtmlHeader.class))
       {
          HtmlHeader htmlHeader = annotatedMethod.getAnnotation(HtmlHeader.class);
-         reachHeader = findType(htmlHeader.value());
+         reachHeader = htmlHeader.value();
       }
    }
 
-   private CellContext decideCell()
+   private CellContext decideCell(TypeOracle typeOracle)
    {
       CellInfoExtractor cellInfoExtractor = new CellInfoExtractor(typeOracle);
       return cellInfoExtractor.getCellInfo(annotatedMethod);
@@ -92,20 +92,12 @@ public class ColumnContext extends AbstractContext
       return cell.getCellType();
    }
 
-   //----------------------------------------
-
-
-   public int getIndex()
-   {
-      return index;
-   }
-
    public String getHeader()
    {
       return header;
    }
 
-   public JClassType getFieldUpdater()
+   public Class getFieldUpdater()
    {
       return fieldUpdater;
    }
@@ -115,7 +107,15 @@ public class ColumnContext extends AbstractContext
       return styleContext;
    }
 
-   public JClassType getReachHeader()
+   //----------------------------------------
+
+
+   public int getIndex()
+   {
+      return index;
+   }
+
+   public Class getReachHeader()
    {
       return reachHeader;
    }

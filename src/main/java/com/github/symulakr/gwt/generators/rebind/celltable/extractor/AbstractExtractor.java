@@ -1,13 +1,14 @@
-package com.github.symulakr.gwt.generators.rebind.celltable;
+package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
-public abstract class AbstractContext
+public abstract class AbstractExtractor
 {
+
    protected TypeOracle typeOracle;
 
-   protected AbstractContext(TypeOracle typeOracle)
+   protected AbstractExtractor(TypeOracle typeOracle)
    {
       this.typeOracle = typeOracle;
    }
@@ -21,4 +22,5 @@ public abstract class AbstractContext
    {
       return typeOracle.findType(className.replaceAll("\\$", "."));
    }
+
 }

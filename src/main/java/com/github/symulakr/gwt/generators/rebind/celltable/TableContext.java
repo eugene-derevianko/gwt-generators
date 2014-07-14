@@ -1,5 +1,8 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ColumnExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ModelTypeExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ResourceTypeExtractor;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;

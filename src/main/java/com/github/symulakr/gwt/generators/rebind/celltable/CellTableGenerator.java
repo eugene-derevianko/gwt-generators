@@ -40,5 +40,6 @@ public class CellTableGenerator extends VelocityGenerator
    protected void validateModel(Logger logger, TypeOracle typeOracle, JClassType modelType) throws UnableToCompleteException
    {
       //todo throw exception for primitive types
+      //todo show message in case of using fieldUpdater and nonClickableColumn
    }
 }

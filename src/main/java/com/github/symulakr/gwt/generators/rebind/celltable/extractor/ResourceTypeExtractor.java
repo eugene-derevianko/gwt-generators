@@ -1,4 +1,4 @@
-package com.github.symulakr.gwt.generators.rebind.celltable;
+package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.TableResources;
 import com.google.gwt.core.ext.typeinfo.JClassType;

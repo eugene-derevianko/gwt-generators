@@ -1,8 +1,7 @@
-package com.github.symulakr.gwt.generators.rebind.celltable;
+package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Map;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
+import com.github.symulakr.gwt.generators.rebind.celltable.ColumnContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -25,12 +25,10 @@ public class ColumnExtractor
          if (method.isAnnotationPresent(Column.class))
          {
             columns.put(method.getName(), method);
-            System.out.println("put "+method.getName());
          }
          else
          {
             columns.remove(method.getName());
-            System.out.println("remove " + method.getName());
          }
       }
    }
@@ -40,13 +38,9 @@ public class ColumnExtractor
       Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>(16, 0.75f, true);
       extractMethods(methods, modelType);
       List<ColumnContext> columns = new ArrayList<ColumnContext>();
-      Iterator<JMethod> methodIterator = methods.values().iterator();
-      while (methodIterator.hasNext())
+      for (JMethod method: methods.values())
       {
-         JMethod me = methodIterator.next();
-         System.out.println("proc "+me.getName());
-
-         columns.add(new ColumnContext(typeOracle, me));
+         columns.add(new ColumnContext(typeOracle, method));
       }
       return sortColumns(columns);
    }
@@ -55,8 +49,9 @@ public class ColumnExtractor
    {
       ColumnContext[] sortedColumns = new ColumnContext[columns.size()];
       Deque<ColumnContext> queue = new LinkedList<ColumnContext>();
-      for (ColumnContext columnContext : columns)
+      for (int i = columns.size(); i > 0; )
       {
+         ColumnContext columnContext = columns.get(--i);
          int index = columnContext.getIndex();
          if (index > DefaultValue.UNSPECIFIED && index < sortedColumns.length && sortedColumns[index] == null)
          {
@@ -83,8 +78,6 @@ public class ColumnExtractor
       if (type != null)
       {
          extractMethods(methods, type.getSuperclass());
-         System.out.println("proc "+type.getName());
-
          extractMethods(methods, type.getMethods());
       }
    }

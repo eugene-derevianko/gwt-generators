@@ -70,14 +70,14 @@ public class ${implName} extends CellTable<${modelType}>
          }
       };
 #if ($columnContext.fieldUpdater)
-      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.qualifiedSourceName}());
+      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.getName()}());
 #end
 #if ($columnContext.styleContext)
       ${columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
       ${columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
 #end
 #if($columnContext.reachHeader)
-      addColumn(${columnName}, new ${columnContext.reachHeader.qualifiedSourceName}());
+      addColumn(${columnName}, new ${columnContext.reachHeader.getName()}());
 #else
       addColumn(${columnName}, "${columnContext.header}");
 #end
