@@ -22,7 +22,7 @@ public class CellInfoExtractor extends AbstractExtractor
    {
       Column column = annotatedMethod.getAnnotation(Column.class);
       CellContext cellInfo = new CellContext();
-      cellInfo.setCellType(findType(column.cellType()));
+      cellInfo.setCellType(column.cellType());
       if (DefaultValue.DEFAULT_CELL_TYPE.equals(column.cellType()))
       {
          cellInfo.setDefaultCell(true);
@@ -32,10 +32,11 @@ public class CellInfoExtractor extends AbstractExtractor
       return cellInfo;
    }
 
-   private JType decideReturnType(JClassType cellType, JType returnType)
+   private JType decideReturnType(Class cellType, JType returnType)
    {
       String cellClassName = Cell.class.getName();
-      for (JClassType superType : cellType.getFlattenedSupertypeHierarchy())
+      JClassType cellJType = findType(cellType);
+      for (JClassType superType : cellJType.getFlattenedSupertypeHierarchy())
       {
          if (cellClassName.equals(superType.getQualifiedSourceName()))
          {

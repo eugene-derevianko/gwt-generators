@@ -1,41 +1,28 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
+import com.github.symulakr.gwt.generators.annotation.celltable.ColumnAlignment;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
-public class ColumnStyleContext
+public class ColumnAlignmentContext
 {
 
    private String horizontalAlignment;
    private String verticalAlignment;
 
-   public ColumnStyleContext(JMethod method)
+   public ColumnAlignmentContext(JMethod method)
    {
-      ColumnStyle columnStyle = method.getAnnotation(ColumnStyle.class);
-      setHorizontalAlignment(columnStyle.horizontalAlignment());
-      setVerticalAlignment(columnStyle.verticalAlignment());
+      ColumnAlignment columnAlignment = method.getAnnotation(ColumnAlignment.class);
+      setHorizontalAlignment(columnAlignment.horizontalAlignment());
+      setVerticalAlignment(columnAlignment.verticalAlignment());
    }
 
-   private void setVerticalAlignment(VerticalAlign align)
+   public String getHorizontalAlignment()
    {
-      verticalAlignment = HasVerticalAlignment.class.getName();
-      switch (align)
-      {
-         case TOP:
-            verticalAlignment += ".ALIGN_TOP";
-            break;
-         case BOTTOM:
-            verticalAlignment += ".ALIGN_BOTTOM";
-            break;
-         case MIDDLE:
-         default:
-            verticalAlignment += ".ALIGN_MIDDLE";
-            break;
-      }
+      return horizontalAlignment;
    }
 
    private void setHorizontalAlignment(TextAlign align)
@@ -58,14 +45,27 @@ public class ColumnStyleContext
       }
    }
 
-   public String getHorizontalAlignment()
-   {
-      return horizontalAlignment;
-   }
-
    public String getVerticalAlignment()
    {
       return verticalAlignment;
+   }
+
+   private void setVerticalAlignment(VerticalAlign align)
+   {
+      verticalAlignment = HasVerticalAlignment.class.getName();
+      switch (align)
+      {
+         case TOP:
+            verticalAlignment += ".ALIGN_TOP";
+            break;
+         case BOTTOM:
+            verticalAlignment += ".ALIGN_BOTTOM";
+            break;
+         case MIDDLE:
+         default:
+            verticalAlignment += ".ALIGN_MIDDLE";
+            break;
+      }
    }
 
 }

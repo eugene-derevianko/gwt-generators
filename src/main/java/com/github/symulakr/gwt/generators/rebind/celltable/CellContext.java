@@ -1,6 +1,5 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
 
 public class CellContext
@@ -8,7 +7,7 @@ public class CellContext
 
    private boolean isDefaultCell = false;
    private JType returnType;
-   private JClassType cellType;
+   private Class cellType;
 
    public boolean isDefaultCell()
    {
@@ -30,12 +29,12 @@ public class CellContext
       this.returnType = returnType;
    }
 
-   public JClassType getCellType()
+   public Class getCellType()
    {
       return cellType;
    }
 
-   public void setCellType(JClassType cellType)
+   public void setCellType(Class cellType)
    {
       this.cellType = cellType;
    }

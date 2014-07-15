@@ -1,12 +1,11 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import com.github.symulakr.gwt.generators.annotation.celltable.Column;
-import com.github.symulakr.gwt.generators.annotation.celltable.ColumnStyle;
+import com.github.symulakr.gwt.generators.annotation.celltable.ColumnAlignment;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
 import com.github.symulakr.utils.StringUtils;
-import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -20,8 +19,9 @@ public class ColumnContext
    private String columnName;
    private JMethod annotatedMethod;
    private Class fieldUpdater;
-   private ColumnStyleContext styleContext;
+   private ColumnAlignmentContext alignmentContext;
    private int index;
+   private boolean sortable = false;
    private CellContext cell;
 
    public ColumnContext(TypeOracle typeOracle, JMethod annotatedMethod) throws NotFoundException
@@ -30,15 +30,15 @@ public class ColumnContext
       Column column = annotatedMethod.getAnnotation(Column.class);
       columnName = annotatedMethod.getName() + "Column";
       cell = decideCell(typeOracle);
-      index = column.index();
+      index = column.position();
       extractHeader(column);
       if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
          fieldUpdater = column.fieldUpdater();
       }
-      if (annotatedMethod.isAnnotationPresent(ColumnStyle.class))
+      if (annotatedMethod.isAnnotationPresent(ColumnAlignment.class))
       {
-         styleContext = new ColumnStyleContext(annotatedMethod);
+         alignmentContext = new ColumnAlignmentContext(annotatedMethod);
       }
       if (annotatedMethod.isAnnotationPresent(HtmlHeader.class))
       {
@@ -87,7 +87,7 @@ public class ColumnContext
       return cell.getReturnType();
    }
 
-   public JClassType getCellType()
+   public Class getCellType()
    {
       return cell.getCellType();
    }
@@ -102,9 +102,14 @@ public class ColumnContext
       return fieldUpdater;
    }
 
-   public ColumnStyleContext getStyleContext()
+   public ColumnAlignmentContext getAlignmentContext()
    {
-      return styleContext;
+      return alignmentContext;
+   }
+
+   public boolean isSortable()
+   {
+      return sortable;
    }
 
    //----------------------------------------

@@ -15,12 +15,12 @@ public abstract class AbstractExtractor
 
    protected JClassType findType(Class<?> clazz)
    {
-      return findType(clazz.getName());
+      return findType(clazz.getCanonicalName());
    }
 
-   protected JClassType findType(String className)
+   protected JClassType findType(String classCanonicalName)
    {
-      return typeOracle.findType(className.replaceAll("\\$", "."));
+      return typeOracle.findType(classCanonicalName);
    }
 
 }

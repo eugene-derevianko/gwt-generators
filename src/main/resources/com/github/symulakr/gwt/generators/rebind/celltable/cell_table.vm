@@ -3,8 +3,6 @@ package ${modelContext.modelType.package.name};
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.github.symulakr.gwt.generators.client.celltable.Getter;
 
 
 /**
@@ -16,29 +14,10 @@ import com.github.symulakr.gwt.generators.client.celltable.Getter;
 * Do NOT Modify this class. It is regenerated every build
 *
 */
-public class ${implName} extends CellTable<${modelType}>
+public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${modelType}>
 {
 
-   public static CellTable.Resources res = GWT.create(${tableContext.resourceType.qualifiedSourceName}.class);
-
-#foreach($columnContext in $tableContext.columns)
-#set($returnType = $columnContext.returnType.qualifiedSourceName)
-#set($getterName = $columnContext.getGetterName())
-
-   public static final Getter<${modelType}, ${returnType}> ${getterName} = new Getter<${modelType}, ${returnType}>()
-   {
-      @Override
-      public ${returnType} getValue(${modelType} model)
-      {
-#if($columnContext.isDefaultCell())
-         return java.util.Objects.toString(model.${getterName}(), "");
-#else
-         return model.${getterName}();
-#end
-      }
-   };
-
-#end
+   public static ${tableContext.resourceType.getCanonicalName()} res = GWT.create(${tableContext.resourceType.getCanonicalName()}.class);
 
    public ${implName}()
    {
@@ -61,28 +40,34 @@ public class ${implName} extends CellTable<${modelType}>
 #set($getterName = $columnContext.getGetterName())
 #set($columnName = $columnContext.columnName)
 
-      Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.qualifiedSourceName}())
+      Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.getCanonicalName()}())
       {
          @Override
          public ${returnType} getValue(${modelType} object)
          {
-            return ${getterName}.getValue(object);
+#if($columnContext.isDefaultCell())
+            return java.util.Objects.toString(object.${getterName}(), "");
+#else
+            return object.${getterName}();
+#end
          }
       };
-#if ($columnContext.fieldUpdater)
-      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.getName()}());
+#if ($columnContext.isSortable())
+      ${columnName}.setSortable(true);
 #end
-#if ($columnContext.styleContext)
-      ${columnName}.setHorizontalAlignment(${columnContext.styleContext.horizontalAlignment});
-      ${columnName}.setVerticalAlignment(${columnContext.styleContext.verticalAlignment});
+#if ($columnContext.fieldUpdater)
+      ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.getCanonicalName()}());
+#end
+#if ($columnContext.alignmentContext)
+      ${columnName}.setHorizontalAlignment(${columnContext.alignmentContext.horizontalAlignment});
+      ${columnName}.setVerticalAlignment(${columnContext.alignmentContext.verticalAlignment});
 #end
 #if($columnContext.reachHeader)
-      addColumn(${columnName}, new ${columnContext.reachHeader.getName()}());
+      addColumn(${columnName}, new ${columnContext.reachHeader.getCanonicalName()}());
 #else
       addColumn(${columnName}, "${columnContext.header}");
 #end
 #end
 
    }
-
 }

@@ -3,6 +3,7 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ColumnExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ModelTypeExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ResourceTypeExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.TableTypeExtractor;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
@@ -10,16 +11,24 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class TableContext
 {
 
-   private JClassType resourceType;
+   private Class resourceType;
    private ColumnContext[] columns;
    private JClassType modelType;
+   private Class tableType;
    private boolean hasHtmlHeader = false;
 
    public TableContext(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
       extractModelType(typeOracle, modelType);
-      extractResourceType(typeOracle, modelType);
+      extractTableType(modelType);
+      extractResourceType(modelType);
       extractColumns(typeOracle, modelType);
+   }
+
+   private void extractTableType(JClassType modelType)
+   {
+      TableTypeExtractor tableTypeExtractor = new TableTypeExtractor();
+      this.tableType = tableTypeExtractor.extractResourceType(modelType);
    }
 
    private void extractModelType(TypeOracle typeOracle, JClassType modelType)
@@ -28,9 +37,9 @@ public class TableContext
       this.modelType = modelTypeExtractor.extractModelType(modelType);
    }
 
-   private void extractResourceType(TypeOracle typeOracle, JClassType modelType)
+   private void extractResourceType(JClassType modelType)
    {
-      ResourceTypeExtractor resourceTypeExtractor = new ResourceTypeExtractor(typeOracle);
+      ResourceTypeExtractor resourceTypeExtractor = new ResourceTypeExtractor();
       resourceType = resourceTypeExtractor.extractResourceType(modelType);
    }
 
@@ -47,7 +56,12 @@ public class TableContext
       }
    }
 
-   public JClassType getResourceType()
+   public Class getTableType()
+   {
+      return tableType;
+   }
+
+   public Class getResourceType()
    {
       return resourceType;
    }

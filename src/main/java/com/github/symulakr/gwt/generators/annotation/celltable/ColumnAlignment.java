@@ -10,7 +10,7 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ColumnStyle
+public @interface ColumnAlignment
 {
 
    TextAlign horizontalAlignment() default TextAlign.CENTER;

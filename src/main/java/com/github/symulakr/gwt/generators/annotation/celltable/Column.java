@@ -24,6 +24,6 @@ public @interface Column
 
    Class<? extends AbstractCell> cellType() default TextCell.class;
 
-   int index() default UNSPECIFIED;
+   int position() default UNSPECIFIED;
 
 }
