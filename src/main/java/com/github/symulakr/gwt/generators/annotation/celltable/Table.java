@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import com.google.gwt.user.cellview.client.CellTable;
 
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 public @interface Table
 {
