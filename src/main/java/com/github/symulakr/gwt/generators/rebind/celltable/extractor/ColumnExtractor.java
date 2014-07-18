@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
 import com.github.symulakr.gwt.generators.rebind.celltable.ColumnContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;

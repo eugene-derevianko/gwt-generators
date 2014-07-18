@@ -2,10 +2,10 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.Column;
-import com.github.symulakr.gwt.generators.annotation.celltable.ColumnAlignment;
-import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnAlignment;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.HtmlHeader;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;

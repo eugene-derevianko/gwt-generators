@@ -1,6 +1,6 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.ColumnAlignment;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnAlignment;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;

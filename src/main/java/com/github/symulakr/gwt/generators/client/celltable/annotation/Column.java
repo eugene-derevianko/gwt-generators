@@ -1,4 +1,4 @@
-package com.github.symulakr.gwt.generators.annotation.celltable;
+package com.github.symulakr.gwt.generators.client.celltable.annotation;
 
 import static com.github.symulakr.gwt.generators.client.celltable.DefaultValue.EMPTY_STRING;
 import static com.github.symulakr.gwt.generators.client.celltable.DefaultValue.UNSPECIFIED;

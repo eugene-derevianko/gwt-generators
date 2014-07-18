@@ -1,7 +1,7 @@
 package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
-import com.github.symulakr.gwt.generators.annotation.celltable.Table;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.Table;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 
 public class TableTypeExtractor

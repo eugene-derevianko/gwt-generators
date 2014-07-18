@@ -1,4 +1,4 @@
-package com.github.symulakr.gwt.generators.annotation.celltable;
+package com.github.symulakr.gwt.generators.client.celltable.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
