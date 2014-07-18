@@ -20,10 +20,11 @@ public @interface Column
 
    String header() default EMPTY_STRING;
 
-   Class<? extends FieldUpdater> fieldUpdater() default DefaultFieldUpdater.class;
-
    Class<? extends AbstractCell> cellType() default TextCell.class;
+
+   Class<? extends FieldUpdater> fieldUpdater() default DefaultFieldUpdater.class;
 
    int position() default UNSPECIFIED;
 
+   boolean enableSorting() default false;
 }

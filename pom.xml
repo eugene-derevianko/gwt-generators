@@ -19,6 +19,7 @@
         <gin.version>2.1.2</gin.version>
         <velocity.version>1.7</velocity.version>
         <guice.version>3.0</guice.version>
+        <apache.commons.version>3.3.2</apache.commons.version>
     </properties>
 
     <dependencies>
@@ -48,9 +49,9 @@
             <version>${velocity.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.symulakr</groupId>
-            <artifactId>utils</artifactId>
-            <version>1.0</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache.commons.version}</version>
         </dependency>
     </dependencies>
 

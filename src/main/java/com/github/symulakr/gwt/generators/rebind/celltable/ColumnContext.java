@@ -1,11 +1,12 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.symulakr.gwt.generators.annotation.celltable.Column;
 import com.github.symulakr.gwt.generators.annotation.celltable.ColumnAlignment;
 import com.github.symulakr.gwt.generators.annotation.celltable.HtmlHeader;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
-import com.github.symulakr.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -31,6 +32,7 @@ public class ColumnContext
       columnName = annotatedMethod.getName() + "Column";
       cell = decideCell(typeOracle);
       index = column.position();
+      sortable = column.enableSorting();
       extractHeader(column);
       if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
@@ -65,7 +67,7 @@ public class ColumnContext
       }
    }
 
-   //-----Getters for Velocity-----------
+   // -----Getters for Velocity-----------
 
    public String getColumnName()
    {
@@ -112,8 +114,7 @@ public class ColumnContext
       return sortable;
    }
 
-   //----------------------------------------
-
+   // ----------------------------------------
 
    public int getIndex()
    {
