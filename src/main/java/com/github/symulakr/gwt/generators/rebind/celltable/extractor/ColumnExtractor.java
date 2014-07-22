@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.NonColumn;
 import com.github.symulakr.gwt.generators.rebind.celltable.ColumnContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
@@ -26,7 +27,7 @@ public class ColumnExtractor
          {
             columns.put(method.getName(), method);
          }
-         else
+         else if (method.isAnnotationPresent(NonColumn.class))
          {
             columns.remove(method.getName());
          }
