@@ -65,7 +65,11 @@ public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${
 #if($columnContext.reachHeader)
       addColumn(${columnName}, new ${columnContext.reachHeader.getCanonicalName()}());
 #else
+#if($columnContext.footer)
+      addColumn(${columnName}, "${columnContext.header}", "${columnContext.footer}");
+#else
       addColumn(${columnName}, "${columnContext.header}");
+#end
 #end
 #end
 

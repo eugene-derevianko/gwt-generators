@@ -16,6 +16,7 @@ public class ColumnContext
 {
 
    private String header;
+   private String footer;
    private Class reachHeader;
    private String columnName;
    private JMethod annotatedMethod;
@@ -34,6 +35,7 @@ public class ColumnContext
       index = column.position();
       sortable = column.enableSorting();
       extractHeader(column);
+      extractFooter(column);
       if (column.fieldUpdater() != DefaultFieldUpdater.class)
       {
          fieldUpdater = column.fieldUpdater();
@@ -67,6 +69,14 @@ public class ColumnContext
       }
    }
 
+   private void extractFooter(Column column)
+   {
+      if (StringUtils.isNotEmpty(column.footer()))
+      {
+         footer = column.footer();
+      }
+   }
+
    // -----Getters for Velocity-----------
 
    public String getColumnName()
@@ -97,6 +107,11 @@ public class ColumnContext
    public String getHeader()
    {
       return header;
+   }
+
+   public String getFooter()
+   {
+      return footer;
    }
 
    public Class getFieldUpdater()

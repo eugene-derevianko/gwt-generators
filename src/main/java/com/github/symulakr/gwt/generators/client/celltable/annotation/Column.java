@@ -23,6 +23,8 @@ public @interface Column
 
    String header() default EMPTY_STRING;
 
+   String footer() default EMPTY_STRING;
+
    Class<? extends AbstractCell> cellType() default TextCell.class;
 
    Class<? extends FieldUpdater> fieldUpdater() default DefaultFieldUpdater.class;
