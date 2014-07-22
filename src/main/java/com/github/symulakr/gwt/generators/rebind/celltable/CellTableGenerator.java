@@ -13,6 +13,8 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class CellTableGenerator extends VelocityGenerator
 {
 
+   private static final String TABLE_CONTEXT_KEY = "tableContext";
+
    @Override
    protected void populateVelocityContext(VelocityContext velocityContext, TypeOracle typeOracle, JClassType modelType)
          throws UnableToCompleteException
@@ -22,7 +24,7 @@ public class CellTableGenerator extends VelocityGenerator
          super.populateVelocityContext(velocityContext, typeOracle, modelType);
          TableContext tableContext = new TableContext(typeOracle, modelType);
          velocityContext.put("generatorType", getClass());
-         velocityContext.put("tableContext", tableContext);
+         velocityContext.put(TABLE_CONTEXT_KEY, tableContext);
       }
       catch (NotFoundException e)
       {
@@ -39,6 +41,14 @@ public class CellTableGenerator extends VelocityGenerator
    @Override
    protected void validateModel(Logger logger, TypeOracle typeOracle, JClassType modelType) throws UnableToCompleteException
    {
+
+   }
+
+   @Override
+   protected void validateVelocityContext(Logger logger, VelocityContext velocityContext) throws UnableToCompleteException
+   {
+      AbstractContext tableContext = (AbstractContext) velocityContext.get(TABLE_CONTEXT_KEY);
+      tableContext.validate(logger);
       //todo throw exception for primitive types
       //todo show message in case of using fieldUpdater and nonClickableColumn
    }

@@ -7,16 +7,16 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 public class TableTypeExtractor
 {
 
-   public Class extractResourceType(JClassType modelType)
+   public Class extractType(JClassType modelType)
    {
       if (modelType != null)
       {
          if (modelType.isAnnotationPresent(Table.class))
          {
-            Table tableResources = modelType.getAnnotation(Table.class);
-            return tableResources.value();
+            Table table = modelType.getAnnotation(Table.class);
+            return table.value();
          }
-         return extractResourceType(modelType.getSuperclass());
+         return extractType(modelType.getSuperclass());
       }
       return DefaultValue.DEFAULT_TABLE_TYPE;
    }

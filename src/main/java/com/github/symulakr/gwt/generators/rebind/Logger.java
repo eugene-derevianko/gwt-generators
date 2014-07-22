@@ -1,9 +1,9 @@
 package com.github.symulakr.gwt.generators.rebind;
 
+import javax.inject.Inject;
+
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
-
-import javax.inject.Inject;
 
 public final class Logger
 {
@@ -18,7 +18,6 @@ public final class Logger
    public void debug(String message, Object... params)
    {
       internalLog(TreeLogger.DEBUG, String.format(message, params));
-
    }
 
    public void info(String message, Object... params)

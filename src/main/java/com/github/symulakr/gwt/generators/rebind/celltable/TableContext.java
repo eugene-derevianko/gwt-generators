@@ -1,14 +1,19 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
+import com.github.symulakr.gwt.generators.rebind.Logger;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ColumnExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ModelTypeExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ResourceTypeExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.TableTypeExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.validator.ModelTypeValidator;
+import com.github.symulakr.gwt.generators.rebind.celltable.validator.ResourceTypeValidator;
+import com.github.symulakr.gwt.generators.rebind.celltable.validator.TableTypeValidator;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
-public class TableContext
+public class TableContext extends AbstractContext
 {
 
    private Class resourceType;
@@ -28,7 +33,7 @@ public class TableContext
    private void extractTableType(JClassType modelType)
    {
       TableTypeExtractor tableTypeExtractor = new TableTypeExtractor();
-      this.tableType = tableTypeExtractor.extractResourceType(modelType);
+      this.tableType = tableTypeExtractor.extractType(modelType);
    }
 
    private void extractModelType(TypeOracle typeOracle, JClassType modelType)
@@ -40,7 +45,7 @@ public class TableContext
    private void extractResourceType(JClassType modelType)
    {
       ResourceTypeExtractor resourceTypeExtractor = new ResourceTypeExtractor();
-      resourceType = resourceTypeExtractor.extractResourceType(modelType);
+      resourceType = resourceTypeExtractor.extractType(modelType);
    }
 
    private void extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
@@ -79,5 +84,13 @@ public class TableContext
    public boolean isHasHtmlHeader()
    {
       return hasHtmlHeader;
+   }
+
+   @Override
+   public void validate(Logger logger) throws UnableToCompleteException
+   {
+      TableTypeValidator.validate(logger, tableType);
+      ResourceTypeValidator.validate(logger, resourceType);
+      ModelTypeValidator.validate(logger, modelType);
    }
 }

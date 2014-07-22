@@ -1,5 +1,10 @@
 package com.github.symulakr.gwt.generators.rebind;
 
+import java.io.PrintWriter;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -8,10 +13,6 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-
-import java.io.PrintWriter;
 
 public abstract class VelocityGenerator extends Generator
 {
@@ -21,7 +22,8 @@ public abstract class VelocityGenerator extends Generator
    {
       TypeOracle typeOracle = generatorContext.getTypeOracle();
       JClassType modelType = typeOracle.findType(modelTypeName);
-      validateModel(new Logger(treeLogger), typeOracle, modelType);
+      Logger logger = new Logger(treeLogger);
+      validateModel(logger, typeOracle, modelType);
       String implName = modelType.getName().replace('.', '_') + "Impl";
       String packageName = modelType.getPackage()
             .getName();
@@ -38,6 +40,7 @@ public abstract class VelocityGenerator extends Generator
          velocityContext.put("modelContext", modelContext);
 
          populateVelocityContext(velocityContext, typeOracle, modelType);
+         validateVelocityContext(logger, velocityContext);
          VelocityEngine velocityEngine = injector.getInstance(VelocityEngine.class);
          velocityEngine.mergeTemplate(getTemplateName(), "UTF-8", velocityContext, printWriter);
          generatorContext.commit(treeLogger, printWriter);
@@ -58,4 +61,6 @@ public abstract class VelocityGenerator extends Generator
    protected abstract String getTemplateName();
 
    protected abstract void validateModel(Logger logger, TypeOracle typeOracle, JClassType modelType) throws UnableToCompleteException;
+
+   protected abstract void validateVelocityContext(Logger logger, VelocityContext velocityContext) throws UnableToCompleteException;
 }
