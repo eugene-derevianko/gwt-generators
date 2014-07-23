@@ -1,9 +1,9 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
+import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnActions;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnAlignment;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.HtmlHeader;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
@@ -11,6 +11,7 @@ import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import org.apache.commons.lang3.StringUtils;
 
 public class ColumnContext
 {
@@ -22,7 +23,7 @@ public class ColumnContext
    private JMethod annotatedMethod;
    private Class fieldUpdater;
    private ColumnAlignmentContext alignmentContext;
-   private int index;
+   private int index = DefaultValue.UNSPECIFIED;
    private boolean sortable = false;
    private CellContext cell;
 
@@ -32,14 +33,9 @@ public class ColumnContext
       Column column = annotatedMethod.getAnnotation(Column.class);
       columnName = annotatedMethod.getName() + "Column";
       cell = decideCell(typeOracle);
-      index = column.position();
-      sortable = column.enableSorting();
+      decideActions(annotatedMethod);
       extractHeader(column);
       extractFooter(column);
-      if (column.fieldUpdater() != DefaultFieldUpdater.class)
-      {
-         fieldUpdater = column.fieldUpdater();
-      }
       if (annotatedMethod.isAnnotationPresent(ColumnAlignment.class))
       {
          alignmentContext = new ColumnAlignmentContext(annotatedMethod);
@@ -48,6 +44,20 @@ public class ColumnContext
       {
          HtmlHeader htmlHeader = annotatedMethod.getAnnotation(HtmlHeader.class);
          reachHeader = htmlHeader.value();
+      }
+   }
+
+   private void decideActions(JMethod annotatedMethod)
+   {
+      if (annotatedMethod.isAnnotationPresent(ColumnActions.class))
+      {
+         ColumnActions columnActions = annotatedMethod.getAnnotation(ColumnActions.class);
+         index = columnActions.position();
+         sortable = columnActions.enableSorting();
+         if (columnActions.fieldUpdater() != DefaultFieldUpdater.class)
+         {
+            fieldUpdater = columnActions.fieldUpdater();
+         }
       }
    }
 
