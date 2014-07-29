@@ -7,11 +7,11 @@ import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnActi
 import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnAlignment;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.HtmlHeader;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
+import com.github.symulakr.gwt.generators.rebind.utils.StringUtils;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import org.apache.commons.lang3.StringUtils;
 
 public class ColumnContext
 {

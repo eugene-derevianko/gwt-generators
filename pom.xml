@@ -19,7 +19,6 @@
         <gin.version>2.1.2</gin.version>
         <velocity.version>1.7</velocity.version>
         <guice.version>3.0</guice.version>
-        <apache.commons.version>3.3.2</apache.commons.version>
     </properties>
 
     <dependencies>
@@ -47,11 +46,6 @@
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>${velocity.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${apache.commons.version}</version>
         </dependency>
     </dependencies>
 
