@@ -2,12 +2,10 @@ package com.github.symulakr.gwt.generators.rebind.celltable;
 
 import com.github.symulakr.gwt.generators.client.celltable.DefaultFieldUpdater;
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
-import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnActions;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnAlignment;
-import com.github.symulakr.gwt.generators.client.celltable.annotation.HtmlHeader;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.CellInfoExtractor;
-import com.github.symulakr.gwt.generators.rebind.utils.StringUtils;
+import com.github.symulakr.gwt.generators.rebind.celltable.extractor.HeaderExtractor;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
@@ -16,9 +14,6 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 public class ColumnContext
 {
 
-   private String header;
-   private String footer;
-   private Class reachHeader;
    private String columnName;
    private JMethod annotatedMethod;
    private Class fieldUpdater;
@@ -26,24 +21,19 @@ public class ColumnContext
    private int index = DefaultValue.UNSPECIFIED;
    private boolean sortable = false;
    private CellContext cell;
+   private HeaderContext headerContext;
+   private HeaderContext footerContext;
 
    public ColumnContext(TypeOracle typeOracle, JMethod annotatedMethod) throws NotFoundException
    {
       this.annotatedMethod = annotatedMethod;
-      Column column = annotatedMethod.getAnnotation(Column.class);
       columnName = annotatedMethod.getName() + "Column";
       cell = decideCell(typeOracle);
       decideActions(annotatedMethod);
-      extractHeader(column);
-      extractFooter(column);
+      extractHeaderAndFooter(annotatedMethod);
       if (annotatedMethod.isAnnotationPresent(ColumnAlignment.class))
       {
          alignmentContext = new ColumnAlignmentContext(annotatedMethod);
-      }
-      if (annotatedMethod.isAnnotationPresent(HtmlHeader.class))
-      {
-         HtmlHeader htmlHeader = annotatedMethod.getAnnotation(HtmlHeader.class);
-         reachHeader = htmlHeader.value();
       }
    }
 
@@ -67,24 +57,11 @@ public class ColumnContext
       return cellInfoExtractor.getCellInfo(annotatedMethod);
    }
 
-   private void extractHeader(Column column)
+   private void extractHeaderAndFooter(JMethod annotatedMethod)
    {
-      if (StringUtils.isEmpty(column.header()))
-      {
-         header = annotatedMethod.getName();
-      }
-      else
-      {
-         header = column.header();
-      }
-   }
-
-   private void extractFooter(Column column)
-   {
-      if (StringUtils.isNotEmpty(column.footer()))
-      {
-         footer = column.footer();
-      }
+      HeaderExtractor headerExtractor = new HeaderExtractor();
+      headerContext = headerExtractor.getHeaderInfo(annotatedMethod);
+      footerContext = headerExtractor.getFooterInfo(annotatedMethod);
    }
 
    // -----Getters for Velocity-----------
@@ -114,16 +91,6 @@ public class ColumnContext
       return cell.getCellType();
    }
 
-   public String getHeader()
-   {
-      return header;
-   }
-
-   public String getFooter()
-   {
-      return footer;
-   }
-
    public Class getFieldUpdater()
    {
       return fieldUpdater;
@@ -146,8 +113,18 @@ public class ColumnContext
       return index;
    }
 
-   public Class getReachHeader()
+   public HeaderContext getHeaderContext()
    {
-      return reachHeader;
+      return headerContext;
+   }
+
+   public HeaderContext getFooterContext()
+   {
+      return footerContext;
+   }
+
+   public boolean hasHtmlHeaders()
+   {
+      return headerContext.isHtmlHeader() || footerContext.isHtmlHeader();
    }
 }

@@ -17,61 +17,91 @@ import com.google.gwt.user.cellview.client.Column;
 public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${modelType}>
 {
 
-   public static ${tableContext.resourceType.getCanonicalName()} res = GWT.create(${tableContext.resourceType.getCanonicalName()}.class);
+public static ${tableContext.resourceType.getCanonicalName()} res = GWT.create(${tableContext.resourceType.getCanonicalName()}.class);
 
-   public ${implName}()
-   {
-      super(0, res);
-      addColumns();
-   }
+public ${implName}()
+{
+super(0, res);
+addColumns();
+}
 
-#if($tableContext.hasHtmlHeader)
-   private void addColumn(Column<${modelType}, ?> col, com.google.gwt.user.client.ui.UIObject header)
-   {
-      addColumn(col, new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(header.getElement()
-         .getInnerHTML())));
-   }
-#end
-
-   private void addColumns()
-   {
+private void addColumns()
+{
 #foreach($columnContext in $tableContext.columns)
-#set($returnType = $columnContext.returnType.qualifiedSourceName)
-#set($getterName = $columnContext.getGetterName())
-#set($columnName = $columnContext.columnName)
+   #set($returnType = $columnContext.returnType.qualifiedSourceName)
+   #set($getterName = $columnContext.getGetterName())
+   #set($columnName = $columnContext.columnName)
 
-      Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.getCanonicalName()}())
-      {
-         @Override
-         public ${returnType} getValue(${modelType} object)
-         {
-#if($columnContext.isDefaultCell())
-            return java.util.Objects.toString(object.${getterName}(), "");
-#else
-            return object.${getterName}();
-#end
-         }
-      };
-#if ($columnContext.isSortable())
+Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.getCanonicalName()}())
+{
+@Override
+public ${returnType} getValue(${modelType} object)
+{
+   #if($columnContext.isDefaultCell())
+   return java.util.Objects.toString(object.${getterName}(), "");
+   #else
+   return object.${getterName}();
+   #end
+}
+};
+   #if ($columnContext.isSortable())
       ${columnName}.setSortable(true);
-#end
-#if ($columnContext.fieldUpdater)
+   #end
+   #if ($columnContext.fieldUpdater)
       ${columnName}.setFieldUpdater(new ${columnContext.fieldUpdater.getCanonicalName()}());
-#end
-#if ($columnContext.alignmentContext)
+   #end
+   #if ($columnContext.alignmentContext)
       ${columnName}.setHorizontalAlignment(${columnContext.alignmentContext.horizontalAlignment});
       ${columnName}.setVerticalAlignment(${columnContext.alignmentContext.verticalAlignment});
-#end
-#if($columnContext.reachHeader)
-      addColumn(${columnName}, new ${columnContext.reachHeader.getCanonicalName()}());
-#else
-#if($columnContext.footer)
-      addColumn(${columnName}, "${columnContext.header}", "${columnContext.footer}");
-#else
-      addColumn(${columnName}, "${columnContext.header}");
-#end
-#end
+   #end
+
+   #set($headerContext = $columnContext.getHeaderContext())
+   #set($footerContext = $columnContext.getFooterContext())
+   #if($columnContext.hasHtmlHeaders())
+      #set($columnNameHeader  = ${columnName}+"Header")
+      #set($columnNameFooter = ${columnName}+"Footer")
+   com.google.gwt.user.cellview.client.Header ${columnNameHeader} = null;
+   com.google.gwt.user.cellview.client.Header ${columnNameFooter} = null;
+
+   ## HeaderPart
+      #if($headerContext.headerUiObject)
+         ${headerContext.headerUiObject.getCanonicalName()} ${columnNameHeader}UiObject = new ${headerContext.headerUiObject.getCanonicalName()}();
+         ${columnNameHeader} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(${columnNameHeader}UiObject.getElement()
+      .getInnerHTML()));
+
+      #elseif($headerContext.headerValue)
+         #if($headerContext.stringValue)
+            ${columnNameHeader} = new ${headerContext.headerValue.getCanonicalName()}(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+         #else
+            ${columnNameHeader} = new ${headerContext.headerValue.getCanonicalName()}();
+         #end
+      #elseif($headerContext.stringValue)
+         ${columnNameHeader} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+      #end
+   ## FooterPart
+      #if($footerContext.headerUiObject)
+         ${footerContext.headerUiObject.getCanonicalName()} ${columnNameFooter}UiObject = new ${footerContext.headerUiObject.getCanonicalName()}();
+         ${columnNameFooter} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(${columnNameFooter}UiObject.getElement()
+      .getInnerHTML()));
+
+      #elseif($footerContext.headerValue)
+         #if($footerContext.stringValue)
+            ${columnNameFooter} = new ${footerContext.headerValue.getCanonicalName()}("${footerContext.stringValue}");
+         #else
+            ${columnNameFooter} = new ${footerContext.headerValue.getCanonicalName()}();
+         #end
+      #elseif($footerContext.stringValue)
+         ${columnNameFooter} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${footerContext.stringValue}"));
+      #end
+   addColumn(${columnName}, ${columnNameHeader}, ${columnNameFooter});
+   #else
+   #if($footerContext.stringValue)
+   addColumn(${columnName}, "${headerContext.stringValue}", "${footerContext.stringValue}");
+   #else
+   addColumn(${columnName}, "${headerContext.stringValue}");
+   #end
+   #end
 #end
 
-   }
+}
 }

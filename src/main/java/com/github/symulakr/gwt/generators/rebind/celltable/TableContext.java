@@ -20,7 +20,6 @@ public class TableContext extends AbstractContext
    private ColumnContext[] columns;
    private JClassType modelType;
    private Class tableType;
-   private boolean hasHtmlHeader = false;
 
    public TableContext(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
@@ -52,13 +51,6 @@ public class TableContext extends AbstractContext
    {
       ColumnExtractor columnExtractor = new ColumnExtractor();
       columns = columnExtractor.extractColumns(typeOracle, modelType);
-      for (ColumnContext columnContext : columns)
-      {
-         if (columnContext.getReachHeader() != null)
-         {
-            hasHtmlHeader = true;
-         }
-      }
    }
 
    public Class getTableType()
@@ -79,11 +71,6 @@ public class TableContext extends AbstractContext
    public JClassType getModelType()
    {
       return modelType;
-   }
-
-   public boolean isHasHtmlHeader()
-   {
-      return hasHtmlHeader;
    }
 
    @Override

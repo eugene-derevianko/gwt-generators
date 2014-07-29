@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 @Beta
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
-public @interface HtmlHeader
+public @interface HtmlFooter
 {
    Class<? extends Header> value() default SafeHtmlHeader.class;
 

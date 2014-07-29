@@ -19,6 +19,7 @@
         <gin.version>2.1.2</gin.version>
         <velocity.version>1.7</velocity.version>
         <guice.version>3.0</guice.version>
+        <junit.version>4.11</junit.version>
     </properties>
 
     <dependencies>
@@ -46,6 +47,12 @@
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>${velocity.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
