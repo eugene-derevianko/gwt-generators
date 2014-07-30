@@ -32,7 +32,6 @@ public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${
 #set($returnType = $columnContext.returnType.qualifiedSourceName)
 #set($getterName = $columnContext.getGetterName())
 #set($columnName = $columnContext.columnName)
-
       Column<${modelType}, ${returnType}> ${columnName} = new Column<${modelType}, ${returnType}>(new ${columnContext.cellType.getCanonicalName()}())
       {
          @Override
@@ -58,49 +57,68 @@ public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${
 
 #set($headerContext = $columnContext.getHeaderContext())
 #set($footerContext = $columnContext.getFooterContext())
+##HtmlHeader or HtmlFooter
 #if($columnContext.hasHtmlHeaders())
 #set($columnNameHeader  = ${columnName}+"Header")
 #set($columnNameFooter = ${columnName}+"Footer")
       com.google.gwt.user.cellview.client.Header ${columnNameHeader} = null;
       com.google.gwt.user.cellview.client.Header ${columnNameFooter} = null;
 
-      ## HeaderPart
+## HeaderPart
 #if($headerContext.headerUiObject)
 #if($headerContext.stringValue)
-      ${headerContext.headerUiObject.getCanonicalName()} ${columnNameHeader}UiObject = new ${headerContext.headerUiObject.getCanonicalName()}(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+      ${headerContext.headerUiObject.getCanonicalName()} ${columnNameHeader}UiObject =
+         new ${headerContext.headerUiObject.getCanonicalName()}(
+               com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
 #else
-      ${headerContext.headerUiObject.getCanonicalName()} ${columnNameHeader}UiObject = new ${headerContext.headerUiObject.getCanonicalName()}();
+      ${headerContext.headerUiObject.getCanonicalName()} ${columnNameHeader}UiObject =
+         new ${headerContext.headerUiObject.getCanonicalName()}();
 #end
-      ${columnNameHeader} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(${columnNameHeader}UiObject.getElement()
-         .getInnerHTML()));
+      ${columnNameHeader} =
+         new com.google.gwt.user.cellview.client.SafeHtmlHeader(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(
+               ${columnNameHeader}UiObject.getElement().getInnerHTML()));
 
 #elseif($headerContext.headerValue)
 #if($headerContext.stringValue)
-      ${columnNameHeader} = new ${headerContext.headerValue.getCanonicalName()}(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+      ${columnNameHeader} =
+         new ${headerContext.headerValue.getCanonicalName()}(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
 #else
-      ${columnNameHeader} = new ${headerContext.headerValue.getCanonicalName()}();
+      ${columnNameHeader} =
+         new ${headerContext.headerValue.getCanonicalName()}();
 #end
 #elseif($headerContext.stringValue)
-      ${columnNameHeader} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+      ${columnNameHeader} =
+         new com.google.gwt.user.cellview.client.SafeHtmlHeader(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
 #end
-      ## FooterPart
+## FooterPart
 #if($footerContext.headerUiObject)
 #if($footerContext.stringValue)
-      ${footerContext.headerUiObject.getCanonicalName()} ${columnNameFooter}UiObject = new ${footerContext.headerUiObject.getCanonicalName()}("${footerContext.stringValue}");
+      ${footerContext.headerUiObject.getCanonicalName()} ${columnNameFooter}UiObject =
+         new ${footerContext.headerUiObject.getCanonicalName()}("${footerContext.stringValue}");
 #else
-      ${footerContext.headerUiObject.getCanonicalName()} ${columnNameFooter}UiObject = new ${footerContext.headerUiObject.getCanonicalName()}();
+      ${footerContext.headerUiObject.getCanonicalName()} ${columnNameFooter}UiObject =
+         new ${footerContext.headerUiObject.getCanonicalName()}();
 #end
-      ${columnNameFooter} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(${columnNameFooter}UiObject.getElement()
-         .getInnerHTML()));
+      ${columnNameFooter} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromTrustedString(
+               ${columnNameFooter}UiObject.getElement().getInnerHTML()));
 
 #elseif($footerContext.headerValue)
 #if($footerContext.stringValue)
-      ${columnNameFooter} = new ${footerContext.headerValue.getCanonicalName()}(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
+      ${columnNameFooter} =
+         new ${footerContext.headerValue.getCanonicalName()}(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${headerContext.stringValue}"));
 #else
-      ${columnNameFooter} = new ${footerContext.headerValue.getCanonicalName()}();
+      ${columnNameFooter} =
+         new ${footerContext.headerValue.getCanonicalName()}();
 #end
 #elseif($footerContext.stringValue)
-      ${columnNameFooter} = new com.google.gwt.user.cellview.client.SafeHtmlHeader(com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${footerContext.stringValue}"));
+      ${columnNameFooter} =
+         new com.google.gwt.user.cellview.client.SafeHtmlHeader(
+            com.google.gwt.safehtml.shared.SafeHtmlUtils.fromString("${footerContext.stringValue}"));
 #end
       addColumn(${columnName}, ${columnNameHeader}, ${columnNameFooter});
 #else
@@ -110,6 +128,7 @@ public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${
       addColumn(${columnName}, "${headerContext.stringValue}");
 #end
 #end
+//----------------------------------------------------------------------------------------------------------------------
 #end
 
    }
