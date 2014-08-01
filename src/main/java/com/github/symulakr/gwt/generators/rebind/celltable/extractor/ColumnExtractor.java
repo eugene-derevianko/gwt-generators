@@ -1,12 +1,5 @@
 package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.NonColumn;
@@ -15,6 +8,13 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ColumnExtractor
 {
@@ -60,7 +60,7 @@ public class ColumnExtractor
          }
          else
          {
-            queue.offer(columnContext);
+            queue.offerFirst(columnContext);
          }
       }
 
