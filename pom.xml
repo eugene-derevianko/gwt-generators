@@ -15,9 +15,28 @@
     <description>This tool makes developing with GWT easier.</description>
     <url>https://github.com/symulakr/gwt-generators</url>
 
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>eugene.derevyanko</id>
+            <name>Eugene Derevyanko</name>
+            <email>eugene.derevyanko@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+
     <scm>
-        <connection>scm:git:git@github.com:symulakr/gwt-generators.git</connection>
         <url>scm:git:git@github.com:symulakr/gwt-generators.git</url>
+        <connection>scm:git:git@github.com:symulakr/gwt-generators.git</connection>
         <developerConnection>scm:git:git@github.com:symulakr/gwt-generators.git</developerConnection>
     </scm>
 
