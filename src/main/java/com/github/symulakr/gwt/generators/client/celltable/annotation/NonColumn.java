@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that method should NOT be represented as column in CellTable
- *
- * @see {@link Column}
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
