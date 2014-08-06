@@ -1,20 +1,18 @@
 package com.github.symulakr.gwt.generators.rebind.celltable.extractor;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Stack;
+
 import com.github.symulakr.gwt.generators.client.celltable.DefaultValue;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.Column;
+import com.github.symulakr.gwt.generators.client.celltable.annotation.ColumnActions;
 import com.github.symulakr.gwt.generators.client.celltable.annotation.NonColumn;
 import com.github.symulakr.gwt.generators.rebind.celltable.ColumnContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class ColumnExtractor
 {
@@ -25,7 +23,7 @@ public class ColumnExtractor
       {
          if (method.isAnnotationPresent(Column.class))
          {
-            columns.put(method.getName(), method);
+            putColumn(columns, method);
          }
          else if (method.isAnnotationPresent(NonColumn.class))
          {
@@ -34,25 +32,34 @@ public class ColumnExtractor
       }
    }
 
+   private void putColumn(Map<String, JMethod> columns, JMethod method)
+   {
+      if (method.isAnnotationPresent(ColumnActions.class))
+      {
+         columns.remove(method.getName());
+      }
+      columns.put(method.getName(), method);
+   }
+
    public ColumnContext[] extractColumns(TypeOracle typeOracle, JClassType modelType) throws NotFoundException
    {
-      Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>(16, 0.75f, true);
+      Map<String, JMethod> methods = new LinkedHashMap<String, JMethod>();
       extractMethods(methods, modelType);
-      List<ColumnContext> columns = new ArrayList<ColumnContext>();
-      for (JMethod method: methods.values())
+      Stack<ColumnContext> columns = new Stack<ColumnContext>();
+      for (JMethod method : methods.values())
       {
-         columns.add(new ColumnContext(typeOracle, method));
+         columns.push(new ColumnContext(typeOracle, method));
       }
       return sortColumns(columns);
    }
 
-   private ColumnContext[] sortColumns(List<ColumnContext> columns)
+   private ColumnContext[] sortColumns(Stack<ColumnContext> columns)
    {
       ColumnContext[] sortedColumns = new ColumnContext[columns.size()];
-      Deque<ColumnContext> queue = new LinkedList<ColumnContext>();
-      for (int i = columns.size(); i > 0; )
+      Stack<ColumnContext> tempStack = new Stack<ColumnContext>();
+      while (!columns.isEmpty())
       {
-         ColumnContext columnContext = columns.get(--i);
+         ColumnContext columnContext = columns.pop();
          int index = columnContext.getIndex();
          if (index > DefaultValue.UNSPECIFIED && index < sortedColumns.length && sortedColumns[index] == null)
          {
@@ -60,15 +67,15 @@ public class ColumnExtractor
          }
          else
          {
-            queue.offerFirst(columnContext);
+            tempStack.push(columnContext);
          }
       }
 
-      for (int i = 0; i < columns.size(); i++)
+      for (int i = 0; i < sortedColumns.length; i++)
       {
          if (sortedColumns[i] == null)
          {
-            sortedColumns[i] = queue.pollFirst();
+            sortedColumns[i] = tempStack.pop();
          }
       }
       return sortedColumns;
