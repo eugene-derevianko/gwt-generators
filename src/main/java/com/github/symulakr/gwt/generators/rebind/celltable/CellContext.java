@@ -8,6 +8,12 @@ public class CellContext
    private boolean isDefaultCell = false;
    private JType returnType;
    private Class cellType;
+   private JType rawReturnType;
+
+   public CellContext(JType rawReturnType)
+   {
+      this.rawReturnType = rawReturnType;
+   }
 
    public boolean isDefaultCell()
    {
@@ -39,4 +45,13 @@ public class CellContext
       this.cellType = cellType;
    }
 
+   public JType getRawReturnType()
+   {
+      return rawReturnType;
+   }
+
+   public void setRawReturnType(JType rawReturnType)
+   {
+      this.rawReturnType = rawReturnType;
+   }
 }
