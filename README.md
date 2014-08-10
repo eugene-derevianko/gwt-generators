@@ -4,6 +4,23 @@ This tool makes developing with [GWT](http://www.gwtproject.org/) easier.
 Use it to create [CellTable](http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/cellview/client/CellTable.html).
 
 How to use it:
+
+get from [Sonatype Nexus](https://oss.sonatype.org/)
+```xml
+   <repository>
+      <id>oss-sonatype</id>
+      <name>oss-sonatype</name>
+      <url>https://oss.sonatype.org/content/groups/staging</url>
+   </repository>
+   
+   <dependency>
+      <groupId>com.github.symulakr</groupId>
+      <artifactId>gwt-generators</artifactId>
+      <version>0.2.2-rc1</version>
+      <scope>compile</scope>
+   </dependency>
+```
+
 ```java
 public class User{
 
