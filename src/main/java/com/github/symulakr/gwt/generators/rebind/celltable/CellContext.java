@@ -5,7 +5,7 @@ import com.google.gwt.core.ext.typeinfo.JType;
 public class CellContext
 {
 
-   private boolean isDefaultCell = false;
+   private boolean thisIsTextCell = false;
    private JType returnType;
    private Class cellType;
    private JType rawReturnType;
@@ -15,14 +15,14 @@ public class CellContext
       this.rawReturnType = rawReturnType;
    }
 
-   public boolean isDefaultCell()
+   public boolean isThisTextCell()
    {
-      return isDefaultCell;
+      return thisIsTextCell;
    }
 
-   public void setDefaultCell(boolean isDefaultCell)
+   public void markAsTextCell(boolean thisIsTextCell)
    {
-      this.isDefaultCell = isDefaultCell;
+      this.thisIsTextCell = thisIsTextCell;
    }
 
    public JType getReturnType()
@@ -53,5 +53,26 @@ public class CellContext
    public void setRawReturnType(JType rawReturnType)
    {
       this.rawReturnType = rawReturnType;
+   }
+
+   public static enum DefaultReturnType
+   {
+      STRING("String"),
+      SAFE_HTML("SafeHtml"),
+      NUMBER("? extends Number");
+
+      private String description;
+
+      DefaultReturnType(String description)
+      {
+         this.description = description;
+      }
+
+      @Override
+      public String toString()
+      {
+         return description;
+      }
+
    }
 }

@@ -14,6 +14,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import static com.github.symulakr.gwt.generators.client.celltable.DefaultValue.DEFAULT_CELL_TYPE;
 import static com.github.symulakr.gwt.generators.client.celltable.DefaultValue.NUMBER_CELL_TYPE;
 import static com.github.symulakr.gwt.generators.client.celltable.DefaultValue.SAFE_HTML_CELL_TYPE;
+import static com.github.symulakr.gwt.generators.rebind.utils.ReflectUtils.isItThisType;
 
 public class CellInfoExtractor extends AbstractExtractor
 {
@@ -41,13 +42,13 @@ public class CellInfoExtractor extends AbstractExtractor
       CellContext cellInfo = new CellContext(returnType);
       if (isString(returnType))
       {
-         cellInfo.setReturnType(findType(String.class));
-         cellInfo.setDefaultCell(true);
+         cellInfo.setReturnType(returnType);
+         cellInfo.markAsTextCell(true);
          cellInfo.setCellType(DEFAULT_CELL_TYPE);
       }
       else if (isSafeHtml(returnType))
       {
-         cellInfo.setReturnType(findType(SafeHtml.class));
+         cellInfo.setReturnType(returnType);
          cellInfo.setCellType(SAFE_HTML_CELL_TYPE);
       }
       else if (isNumber(returnType))
@@ -88,11 +89,6 @@ public class CellInfoExtractor extends AbstractExtractor
    private boolean isString(JType returnType)
    {
       return isItThisType(returnType, String.class);
-   }
-
-   private boolean isItThisType(JType it, Class thisType)
-   {
-      return thisType.getName().equals(it.getQualifiedSourceName());
    }
 
    private JType decideReturnType(Class cellType)

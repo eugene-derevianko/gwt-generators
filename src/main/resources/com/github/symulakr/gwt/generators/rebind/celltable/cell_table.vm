@@ -37,7 +37,7 @@ public class ${implName} extends ${tableContext.tableType.getCanonicalName()}<${
          @Override
          public ${returnType} getValue(${modelType} object)
          {
-#if($columnContext.isDefaultCell())
+#if($columnContext.isThisTextCell())
             return java.util.Objects.toString(object.${getterName}(), "");
 #else
             return object.${getterName}();

@@ -1,14 +1,13 @@
 package com.github.symulakr.gwt.generators.rebind.celltable;
 
 
-import org.apache.velocity.VelocityContext;
-
 import com.github.symulakr.gwt.generators.rebind.Logger;
 import com.github.symulakr.gwt.generators.rebind.VelocityGenerator;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import org.apache.velocity.VelocityContext;
 
 public class CellTableGenerator extends VelocityGenerator
 {
@@ -49,9 +48,5 @@ public class CellTableGenerator extends VelocityGenerator
    {
       AbstractContext tableContext = (AbstractContext) velocityContext.get(TABLE_CONTEXT_KEY);
       tableContext.validate(logger);
-      //todo throw exception for primitive types
-      //todo show message in case of using fieldUpdater and nonClickableColumn
-      //todo [INFO]       [ERROR] Line 82: The method setFieldUpdater(FieldUpdater<Model,String>) in the type Column<Model,String> is not applicable for the arguments (FieldUpdaterImpl)
-
    }
 }

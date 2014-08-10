@@ -1,5 +1,7 @@
 package com.github.symulakr.gwt.generators.rebind.utils;
 
+import com.google.gwt.core.ext.typeinfo.JType;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
@@ -38,6 +40,16 @@ public class ReflectUtils
          }
       }
       return false;
+   }
+
+   public static boolean isItThisType(JType it, Class thisType)
+   {
+      return StringUtils.equals(thisType.getName(), it.getQualifiedSourceName());
+   }
+
+   public static boolean isItThisType(JType it, JType thisType)
+   {
+      return StringUtils.equals(thisType.getQualifiedSourceName(), it.getQualifiedSourceName());
    }
 
 }
