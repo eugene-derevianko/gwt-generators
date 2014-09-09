@@ -5,18 +5,12 @@ Use it to create [CellTable](http://www.gwtproject.org/javadoc/latest/com/google
 
 How to use it:
 
-get from [Sonatype Nexus](https://oss.sonatype.org/)
+get from [The Central Repository](http://search.maven.org/)
 ```xml
-   <repository>
-      <id>oss-sonatype</id>
-      <name>oss-sonatype</name>
-      <url>https://oss.sonatype.org/content/groups/staging</url>
-   </repository>
-   
    <dependency>
       <groupId>com.github.symulakr</groupId>
       <artifactId>gwt-generators</artifactId>
-      <version>0.2.2-rc3</version>
+      <version>0.2.2</version>
       <scope>compile</scope>
    </dependency>
 ```
