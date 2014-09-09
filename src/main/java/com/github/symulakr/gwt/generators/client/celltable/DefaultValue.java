@@ -1,5 +1,7 @@
 package com.github.symulakr.gwt.generators.client.celltable;
 
+import com.google.gwt.cell.client.NumberCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
@@ -10,6 +12,8 @@ public class DefaultValue
 {
 
    public static final Class DEFAULT_CELL_TYPE = TextCell.class;
+   public static final Class SAFE_HTML_CELL_TYPE = SafeHtmlCell.class;
+   public static final Class NUMBER_CELL_TYPE = NumberCell.class;
    public static final int UNSPECIFIED = -1;
    public static final String EMPTY_STRING = "";
    public static final Class DEFAULT_RESOURCES = Resources.class;

@@ -49,9 +49,5 @@ public class CellTableGenerator extends VelocityGenerator
    {
       AbstractContext tableContext = (AbstractContext) velocityContext.get(TABLE_CONTEXT_KEY);
       tableContext.validate(logger);
-      //todo throw exception for primitive types
-      //todo show message in case of using fieldUpdater and nonClickableColumn
-      //todo [INFO]       [ERROR] Line 82: The method setFieldUpdater(FieldUpdater<Model,String>) in the type Column<Model,String> is not applicable for the arguments (FieldUpdaterImpl)
-
    }
 }

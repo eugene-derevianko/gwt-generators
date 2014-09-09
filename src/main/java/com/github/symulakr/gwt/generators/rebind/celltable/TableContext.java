@@ -5,6 +5,7 @@ import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ColumnExtra
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ModelTypeExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.ResourceTypeExtractor;
 import com.github.symulakr.gwt.generators.rebind.celltable.extractor.TableTypeExtractor;
+import com.github.symulakr.gwt.generators.rebind.celltable.validator.ColumnContextValidator;
 import com.github.symulakr.gwt.generators.rebind.celltable.validator.ModelTypeValidator;
 import com.github.symulakr.gwt.generators.rebind.celltable.validator.ResourceTypeValidator;
 import com.github.symulakr.gwt.generators.rebind.celltable.validator.TableTypeValidator;
@@ -79,5 +80,6 @@ public class TableContext extends AbstractContext
       TableTypeValidator.validate(logger, tableType);
       ResourceTypeValidator.validate(logger, resourceType);
       ModelTypeValidator.validate(logger, modelType);
+      ColumnContextValidator.validate(logger, columns);
    }
 }

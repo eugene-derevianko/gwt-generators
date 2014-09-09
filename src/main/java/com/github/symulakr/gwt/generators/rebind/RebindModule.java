@@ -1,17 +1,19 @@
 package com.github.symulakr.gwt.generators.rebind;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import javax.inject.Singleton;
+
+import org.apache.velocity.app.VelocityEngine;
+
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import org.apache.velocity.app.VelocityEngine;
-
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public class RebindModule extends AbstractModule
 {

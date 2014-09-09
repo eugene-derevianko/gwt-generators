@@ -76,9 +76,9 @@ public class ColumnContext
       return annotatedMethod.getName();
    }
 
-   public boolean isDefaultCell()
+   public boolean isThisTextCell()
    {
-      return cell.isDefaultCell();
+      return cell.isThisTextCell();
    }
 
    public JType getReturnType()
@@ -126,5 +126,10 @@ public class ColumnContext
    public boolean hasHtmlHeaders()
    {
       return headerContext.isHtmlHeader() || footerContext.isHtmlHeader();
+   }
+
+   public CellContext getCell()
+   {
+      return cell;
    }
 }
