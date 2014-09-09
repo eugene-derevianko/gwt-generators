@@ -16,7 +16,7 @@ get from [Sonatype Nexus](https://oss.sonatype.org/)
    <dependency>
       <groupId>com.github.symulakr</groupId>
       <artifactId>gwt-generators</artifactId>
-      <version>0.2.2-rc1</version>
+      <version>0.2.2-rc3</version>
       <scope>compile</scope>
    </dependency>
 ```
