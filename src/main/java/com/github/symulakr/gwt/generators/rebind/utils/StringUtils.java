@@ -13,4 +13,22 @@ public class StringUtils
       return !StringUtils.isEmpty(str);
    }
 
+   public static boolean equals(CharSequence cs1, CharSequence cs2)
+   {
+      return cs1 == null ? cs2 == null : cs1.equals(cs2);
+   }
+
+   public static String toString(Object... objects)
+   {
+      StringBuilder sb = new StringBuilder();
+      String delimiter = "";
+      for (Object object : objects)
+      {
+         sb.append(delimiter).
+            append(object.toString());
+         delimiter = ", ";
+      }
+      return sb.toString();
+   }
+
 }

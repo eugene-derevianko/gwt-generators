@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gwt-generators</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>gwt-generators</name>
@@ -17,8 +17,8 @@
 
     <licenses>
         <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
