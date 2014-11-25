@@ -41,7 +41,7 @@
     </scm>
 
     <properties>
-        <gwt.version>2.6.1</gwt.version>
+        <gwt.version>2.7.0</gwt.version>
         <gin.version>2.1.2</gin.version>
         <velocity.version>1.7</velocity.version>
         <guice.version>3.0</guice.version>
